@@ -1,0 +1,16 @@
+<div id="wrapper" align="center" ng-show="show_pay">
+    <div align="center"><img src="./assets/img/xacnhan_logo.png" width="70%" alt=""></div>
+    <h2 align="center">Xác nhận thanh toán</h2>
+
+    <div class="values">
+        <label>MÃ HÓA ĐƠN</label>
+        <p class="number">#{{invoice_code}}</p>
+        <br>
+        <label>TỔNG TIỀN THANH TOÁN</label>
+        <p class="number">{{amount | currency:"":0}} VNĐ</p>
+    </div>
+    <div align="center">
+        <a class="btn" ng-click="payInvoice()">THANH TOÁN</a>
+        <p style="color: red;" ng-show="show_donhang">(*) Đơn hàng không hợp lệ</p>
+    </div>
+</div>

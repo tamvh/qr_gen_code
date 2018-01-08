@@ -1,0 +1,43 @@
+<!-- index.html -->
+<!DOCTYPE html>
+<html ng-app="theApp">
+<head>
+    
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Xác Nhận</title>
+    
+    <!-- SCROLLS -->
+    <link href="assets/css/mystyle.css" rel="stylesheet">
+       
+    <!-- SPELLS -->
+    <!-- load angular and angular route via CDN -->
+    <script src="assets/js/jquery-1.12.0.min.js"></script>
+    <script src="assets/js/angular-1.5.5.min.js"></script>
+    <script src="assets/js/angular-route-1.5.5.min.js"></script>
+    <script src="assets/js/angular-cookies-1.5.5.min.js"></script>
+    <script src="assets/js/angular-resource-1.5.5.min.js"></script>
+    <script src="assets/js/bootstrap-3.3.6.min.js"></script>
+    
+    <script src="assets/js/smart-table.min.js"></script>    
+    <script src="assets/js/ui-bootstrap-tpls-1.3.3.min.js"></script>
+    
+    <script src="app_define.js"></script>
+    <script src="app.js"></script>
+    
+    <script src="pay/pay.controller.js"></script>
+    <script src="pay/pay.service.js"></script>
+    <script src="alert.success/alert.success.controller.js"></script>
+    <script src="alert.faile/alert.faile.controller.js"></script>
+    <script src="invoice.err/invoice.err.controller.js"></script>
+    <script src = "https://sandbox.zalopay.com.vn/qrcode/public/js/zalopay.js?ver=1494921725335"></script>
+</head>
+<body>
+    <!-- MAIN CONTENT AND INJECTED VIEWS -->
+    <div id="main">
+        <!-- angular templating -->
+        <!-- this is where content will be injected -->
+        <div ng-view></div>
+    </div>
+</body>
+</html>
