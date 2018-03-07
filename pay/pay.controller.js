@@ -20,14 +20,14 @@
         $rootScope.isaction = false;
         $scope.payInvoice = payInvoice;
 
-        get_params();
-
-        if ($rootScope.merchant_code !== undefined && $rootScope.invoice_code !== undefined) {
-            getPaymentInvoice();
-        }
+        
         
         $scope.init = function () {
             initJsBrige();
+            get_params();
+            if ($rootScope.merchant_code !== undefined && $rootScope.invoice_code !== undefined) {
+                getPaymentInvoice();
+            }
         };
 
         $scope.init();
