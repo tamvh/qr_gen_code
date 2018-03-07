@@ -36,6 +36,6 @@ theApp.constant('API_URL', API_URL); //define CONST API_URL
 
     run.$inject = ['$rootScope'];
     function run($rootScope) {
-	        
+        $rootScope.msg = "";
     }
 })();

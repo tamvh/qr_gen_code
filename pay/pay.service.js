@@ -14,9 +14,9 @@
         
         return service;
         
-        function getPaymentInvoice(merchantCode, invoiceCode) {
+        function getPaymentInvoice(merchantCode, invoiceCode, am) {
             var cmd = "get_payment_invoice";
-            var dtJson = {merchant_code: merchantCode, invoice_code: invoiceCode};
+            var dtJson = {merchant_code: merchantCode, invoice_code: invoiceCode, amount: am};
             var dt = JSON.stringify(dtJson);
             var data = $.param({
                 cm: cmd,

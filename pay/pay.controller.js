@@ -13,6 +13,8 @@
         $scope.amount = 0;
         $scope.show_donhang = false;
         $rootScope.invoice_code = "";
+        $rootScope.total_amount = 0;
+        $rootScope.msg = "";
         $scope.show_pay = false;
         $scope.payInvoice = payInvoice;
 
@@ -39,12 +41,14 @@
                 for (var i = 0; i < params_split.length; i++) {
                     var param_i = params_split[i];
                     var param_i_split = param_i.split('=');
-                    if (param_i_split.length === 2) {
+                    if (param_i_split.length === 3) {
                         var param_name = param_i_split[0];
                         if (param_name === 'mc') {
                             $rootScope.merchant_code = param_i_split[1];
                         } else if (param_name === 'iv') {
                             $rootScope.invoice_code = param_i_split[1];
+                        } else if (param_name === 'amount') {
+                            $rootScope.total_amount = param_i_split[1];
                         }
                     }
                 }
@@ -52,8 +56,9 @@
         }
 
         function getPaymentInvoice() {
-            PayService.getPaymentInvoice($rootScope.merchant_code, $rootScope.invoice_code)
+            PayService.getPaymentInvoice($rootScope.merchant_code, $rootScope.invoice_code, $rootScope.total_amount)
                     .then(function (response) {
+                        $rootScope.msg = response.msg;
                         if (response.err === 0) {
                             $scope.show_pay = true; 
                             $scope.amount = response.dt.invoice.amount;
