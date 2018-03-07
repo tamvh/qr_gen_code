@@ -16,6 +16,8 @@
         $rootScope.total_amount = 0;
         $rootScope.msg = "";
         $scope.show_pay = false;
+        $scope.iszp = false;
+        $rootScope.isaction = false;
         $scope.payInvoice = payInvoice;
 
         get_params();
@@ -41,7 +43,7 @@
                 for (var i = 0; i < params_split.length; i++) {
                     var param_i = params_split[i];
                     var param_i_split = param_i.split('=');
-                    if (param_i_split.length === 3) {
+                    if (param_i_split.length === 2) {
                         var param_name = param_i_split[0];
                         if (param_name === 'mc') {
                             $rootScope.merchant_code = param_i_split[1];
@@ -56,25 +58,36 @@
         }
 
         function getPaymentInvoice() {
-            PayService.getPaymentInvoice($rootScope.merchant_code, $rootScope.invoice_code, $rootScope.total_amount)
-                    .then(function (response) {
-                        $rootScope.msg = response.msg;
-                        if (response.err === 0) {
-                            $scope.show_pay = true; 
-                            $scope.amount = response.dt.invoice.amount;
-                        } else {
-                            //don hang khong hop le
-                            if($rootScope.click_btnthanhtoan === false) {
-                                $location.path("/invoice_err");
+            if(!$scope.iszp) {
+                $rootScope.msg = "ZaloPay chưa sẵn sàng";
+                $location.path("/invoice_err");
+            } else {
+                if(!$rootScope.isaction) {
+                    PayService.getPaymentInvoice($rootScope.merchant_code, $rootScope.invoice_code, $rootScope.total_amount)
+                        .then(function (response) {
+                            if (response.err === 0) {
+                                $scope.show_pay = true; 
+                                $scope.amount = response.dt.invoice.amount;
+                            } else {
+                                //don hang khong hop le
+                                if($rootScope.click_btnthanhtoan === false) {
+                                    $rootScope.msg = response.msg;
+                                }
                             }
-                        }
-                    });
+                        });
+                        $rootScope.isaction = true;
+                } else {
+                    ZaloPay.closeWindow();
+                }
+            }
         }
 
         function payInvoice() {
+            ZaloPay.showLoading();
             $rootScope.click_btnthanhtoan = true;
             PayService.payInvoice($rootScope.merchant_code, $rootScope.invoice_code, $scope.amount)
                     .then(function (response) {
+                        ZaloPay.hideLoading();
                         if (response.err === 0) {
                             $scope.show_donhang = false;
                             var zptranstoken = response.dt.zptranstoken;
@@ -85,12 +98,16 @@
                             }, $scope.cb);
                         } else {
                             $scope.show_donhang = true;
+                            $rootScope.msg = response.msg;
+                            $location.path("/invoice_err");
                         }
                     });
+            ZaloPay.hideLoading();
         }
 
         function initJsBrige() {
             ZaloPay.ready(() => {
+                $scope.iszp = true;
                 console.log("ZaloPayBridge is ready");
             });
         }
@@ -105,6 +122,7 @@
 //                        message: "Thanh toán đơn hàng thành công. Vui lòng nhận hoá đơn.",
 //                        button: "OK"
 //                    });
+                    $rootScope.msg = "Thanh toán đơn hàng thành công"; 
                     window.location.href = url + "#/alert_success";
 //                    $location.path("/alert_success");
                 } else if (data.error === 4) {
@@ -113,6 +131,7 @@
 //                        message: "Người dùng huỷ đơn hàng.",
 //                        button: "OK"
 //                    });
+                    $rootScope.msg = "Người dùng huỷ đơn hàng"; 
                     window.location.href = url + "#/alert_faile";
                     //$location.path("/alert_faile");
                 } else {
@@ -121,6 +140,7 @@
 //                        message: "Thanh toán thất bại. Vui lòng thử lại.",
 //                        button: "OK"
 //                    });
+                    $rootScope.msg = "Thanh toán thất bại"; 
                     window.location.href = url + "#/alert_faile";
 //                    $location.path("/alert_faile");
                 }
